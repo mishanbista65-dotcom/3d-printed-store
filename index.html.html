@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>3D Printed Store – Product Catalog</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --bg: #f4f7ff;
+    --card: #ffffff;
+    --text: #1e293b;
+    --sub: #64748b;
+  }
+  body { margin:0; font-family: Arial; background: var(--bg); color: var(--text);} 
+  header {
+    background: var(--primary);
+    color: #fff;
+    padding: 20px;
+    text-align:center;
+    font-size:26px;
+    font-weight:bold;
+  }
+  .container { max-width:1100px; margin:auto; padding:20px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
+  .card {
+    background:var(--card);
+    padding:18px;
+    border-radius:16px;
+    box-shadow:0 8px 28px rgba(0,0,0,0.08);
+    display:flex;
+    flex-direction:column;
+  }
+  .card img{ width:100%; border-radius:12px; height:180px; object-fit:cover; display:none; margin-top:8px; }
+  h3{ margin:10px 0 0; }
+  .price-box {
+    margin-top:10px;
+    background: #eef2ff;
+    padding: 12px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .price-row label {
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  .price-row input {
+    width: 50%;
+    padding:8px;
+    border-radius:6px;
+    border:1px solid #cbd5e1;
+  }
+  .final-price {
+    background: #d1fae5;
+    color: #065f46;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  button{
+    background:var(--primary); 
+    color:#fff; 
+    padding:10px; 
+    border:none; 
+    border-radius:10px; 
+    margin-top:5px; 
+    cursor:pointer;
+  }
+  button:hover{ opacity:0.9; }
+  footer{ text-align:center; padding:20px; color:var(--sub); margin-top:20px; }
+</style>
+
+<!-- EmailJS SDK -->
+<script type="text/javascript" src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script type="text/javascript">
+   (function(){emailjs.init("YOUR_USER_ID");})(); // Replace with your EmailJS user ID
+</script>
+</head>
+<body>
+<header>3D Printed Store – Custom & Premium Items</header>
+<div class="container">
+  <p style="text-align:center; color:var(--sub); font-size:15px; margin-bottom:20px;">
+    Upload product image, set market price & discount %, final price is calculated automatically.
+  </p>
+
+  <div class="grid">
+
+    <!-- Product Cards -->
+    <div class="card">
+      <h3>Decorating Item</h3>
+      <input type="file" accept="image/*" onchange="previewImage(event,'decImg')">
+      <img id="decImg"/>
+      <p class="sub">Beautiful decorative 3D printed showpieces.</p>
+      <div class="price-box">
+        <div class="price-row">
+          <label>Market Price (NPR):</label>
+          <input type="number" id="mp1" placeholder="Enter price" oninput="updateFinal('mp1','d1','o1')"/>
+        </div>
+        <div class="price-row">
+          <label>Discount (%):</label>
+          <input type="number" id="d1" placeholder="Enter %" oninput="updateFinal('mp1','d1','o1')"/>
+        </div>
+        <p id="o1" class="final-price"></p>
+        <button onclick="buyProduct('Decorating Item','mp1','d1','o1')">Buy Now</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Toy</h3>
+      <input type="file" accept="image/*" onchange="previewImage(event,'toyImg')">
+      <img id="toyImg"/>
+      <p class="sub">Custom toys and mini models for kids.</p>
+      <div class="price-box">
+        <div class="price-row">
+          <label>Market Price (NPR):</label>
+          <input type="number" id="mp2" placeholder="Enter price" oninput="updateFinal('mp2','d2','o2')"/>
+        </div>
+        <div class="price-row">
+          <label>Discount (%):</label>
+          <input type="number" id="d2" placeholder="Enter %" oninput="updateFinal('mp2','d2','o2')"/>
+        </div>
+        <p id="o2" class="final-price"></p>
+        <button onclick="buyProduct('Toy','mp2','d2','o2')">Buy Now</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Useful Item</h3>
+      <input type="file" accept="image/*" onchange="previewImage(event,'useImg')">
+      <img id="useImg"/>
+      <p class="sub">Daily use tools, holders, and accessories.</p>
+      <div class="price-box">
+        <div class="price-row">
+          <label>Market Price (NPR):</label>
+          <input type="number" id="mp3" placeholder="Enter price" oninput="updateFinal('mp3','d3','o3')"/>
+        </div>
+        <div class="price-row">
+          <label>Discount (%):</label>
+          <input type="number" id="d3" placeholder="Enter %" oninput="updateFinal('mp3','d3','o3')"/>
+        </div>
+        <p id="o3" class="final-price"></p>
+        <button onclick="buyProduct('Useful Item','mp3','d3','o3')">Buy Now</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Kitchen Item</h3>
+      <input type="file" accept="image/*" onchange="previewImage(event,'kitImg')">
+      <img id="kitImg"/>
+      <p class="sub">3D printed spoons, molds, and holders.</p>
+      <div class="price-box">
+        <div class="price-row">
+          <label>Market Price (NPR):</label>
+          <input type="number" id="mp4" placeholder="Enter price" oninput="updateFinal('mp4','d4','o4')"/>
+        </div>
+        <div class="price-row">
+          <label>Discount (%):</label>
+          <input type="number" id="d4" placeholder="Enter %" oninput="updateFinal('mp4','d4','o4')"/>
+        </div>
+        <p id="o4" class="final-price"></p>
+        <button onclick="buyProduct('Kitchen Item','mp4','d4','o4')">Buy Now</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Table Lamp</h3>
+      <input type="file" accept="image/*" onchange="previewImage(event,'lampImg')">
+      <img id="lampImg"/>
+      <p class="sub">Modern 3D printed table lamps.</p>
+      <div class="price-box">
+        <div class="price-row">
+          <label>Market Price (NPR):</label>
+          <input type="number" id="mp5" placeholder="Enter price" oninput="updateFinal('mp5','d5','o5')"/>
+        </div>
+        <div class="price-row">
+          <label>Discount (%):</label>
+          <input type="number" id="d5" placeholder="Enter %" oninput="updateFinal('mp5','d5','o5')"/>
+        </div>
+        <p id="o5" class="final-price"></p>
+        <button onclick="buyProduct('Table Lamp','mp5','d5','o5')">Buy Now</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>3D Printed Moon Lamp</h3>
+      <input type="file" accept="image/*" onchange="previewImage(event,'moonImg')">
+      <img id="moonImg"/>
+      <p class="sub">Beautiful 3D printed moon night lamp.</p>
+      <div class="price-box">
+        <div class="price-row">
+          <label>Market Price (NPR):</label>
+          <input type="number" id="mp6" placeholder="Enter price" oninput="updateFinal('mp6','d6','o6')"/>
+        </div>
+        <div class="price-row">
+          <label>Discount (%):</label>
+          <input type="number" id="d6" placeholder="Enter %" oninput="updateFinal('mp6','d6','o6')"/>
+        </div>
+        <p id="o6" class="final-price"></p>
+        <button onclick="buyProduct('3D Printed Moon Lamp','mp6','d6','o6')">Buy Now</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<footer>© 2025 3D Printed Store • Custom Business Website</footer>
+
+<script>
+function previewImage(event, imgId){
+  const file = event.target.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(e){
+      const img = document.getElementById(imgId);
+      img.src = e.target.result;
+      img.style.display = 'block';
+    }
+    reader.readAsDataURL(file);
+  }
+}
+
+function updateFinal(mpId, discountId, outputId){
+  const mp = parseFloat(document.getElementById(mpId).value);
+  const discount = parseFloat(document.getElementById(discountId).value) || 0;
+  const out = document.getElementById(outputId);
+  if(isNaN(mp) || mp <= 0){
+    out.style.color = "red";
+    out.textContent = "Enter valid market price!";
+    return;
+  }
+  const finalPrice = mp - (mp * discount / 100);
+  out.style.color = "#065f46";
+  out.textContent = `Market: NPR ${mp} | Discount: ${discount}% | Final: NPR ${finalPrice.toFixed(2)}`;
+}
+
+function buyProduct(name, mpId, discountId, outputId){
+  const mp = parseFloat(document.getElementById(mpId).value);
+  const discount = parseFloat(document.getElementById(discountId).value) || 0;
+  const finalPrice = mp - (mp * discount / 100);
+  if(isNaN(mp) || mp <= 0){
+    alert("Enter valid market price first!");
+    return;
+  }
+
+  emailjs.send('YOUR_SERVICE_ID','YOUR_TEMPLATE_ID',{
+    product: name,
+    price: mp,
+    discount: discount,
+    final_price: finalPrice.toFixed(2)
+  }).then(function(response){
+    alert('Purchase info sent to your email!');
+  }, function(error){
+    alert('Failed to send email: ' + JSON.stringify(error));
+  });
+}
+</script>
+</body>
+</html>
